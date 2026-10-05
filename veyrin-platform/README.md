@@ -1,55 +1,60 @@
-# Veyrin — AI Career Preparation Platform
+# Veyrin AI Career Platform
 
-A production-oriented Next.js starter for Veyrin: AI Engineer, GenAI, Agentic AI, ML and Data Science interview preparation plus courses, Python coding practice and video learning.
-
-## Stack
-- Next.js 16.3.8 + App Router
-- React 19
-- TypeScript
-- Supabase Auth / Postgres / RLS-ready schema
-- OpenAI Responses API for the admin AI content studio
-- YouTube IFrame embeds
-- Plain CSS design system (easy to customize)
-
-Next.js 16.3.8 is the current patched Active LTS referenced in the September 2026 security release. Supabase's current Next.js guidance uses `@supabase/ssr` and cookie-based auth. The admin AI generator uses the Responses API, not the retired Assistants API. See the official docs in the project notes/source links.
+Next.js 16 + Supabase career/learning platform with protected interview products and Razorpay payments.
 
 ## Run locally
-1. Copy `.env.example` to `.env.local`.
-2. Create a Supabase project and add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
-3. Run `supabase/schema.sql` in Supabase SQL Editor.
-4. Set `ADMIN_EMAIL` to your admin login email.
-5. Add `OPENAI_API_KEY` and optionally `OPENAI_MODEL` for AI generation.
-6. Install and run:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open http://localhost:3000.
+## Environment
+
+Copy `.env.example` to `.env.local` and configure Supabase, Razorpay, admin email and OpenAI values.
+
+## Supabase setup
+
+Run the base schema first:
+
+```text
+supabase/schema.sql
+```
+
+Then run these migrations in Supabase SQL Editor:
+
+```text
+supabase/migrations/20261005_payment_orders.sql
+supabase/migrations/20261005_genai_bank_seed.sql
+```
+
+The second migration ensures the ₹199 **GenAI Engineer Interview Question Bank — India** has real questions in `public.questions`.
+
+## Purchase flow
+
+1. User clicks Buy on a course.
+2. If not signed in, Veyrin sends the user to `/login?next=<course>`.
+3. After sign-in, the user is returned to the exact course they started from.
+4. Razorpay creates the order server-side.
+5. Browser callback and server-side Razorpay status polling can confirm payment.
+6. A verified/captured payment creates an active row in `public.enrollments`.
+7. The purchased course page changes from **Buy** to **Open**.
+8. The dashboard and `/profile` show purchased courses.
 
 ## Admin
-Go to `/admin/login` and sign in with the configured admin email. The control center provides product creation, price editing, publishing, manual material drafts, interview-question creation and the AI studio. The AI studio can generate:
-- interview question sets
-- course lessons
-- Python coding sets
-- revision notes
-- mock interview structures
 
-Generated material is saved as a reviewable draft. Product and price changes are written server-side using the Supabase service role key; that key is never exposed to the browser.
+Use the normal `/login`. If the authenticated email matches `ADMIN_EMAIL`, Veyrin sends the user to `/admin` and shows the Admin navigation option.
 
-## Payments
-The UI is prepared for paid courses, but payment processing is intentionally not hard-coded into this first zip. Add Razorpay after the catalog and enrollment schema are verified. Never expose the Razorpay secret key in the browser.
+## GenAI interview bank
 
-## Video
-YouTube videos can be embedded by URL. The `videos` page contains a placeholder. Replace it with your channel videos or connect the admin video library to Supabase. YouTube's official IFrame API supports embedded playback and playlists.
+Protected route:
 
-## Production hardening before launch
-- Add a proper admin role/claims strategy instead of relying only on `ADMIN_EMAIL`.
-- Add server-side admin CRUD using Supabase service role in protected route handlers.
-- Add payment verification/webhooks.
-- Add protected course content and enrollment checks.
-- Add rate limiting to the AI endpoint.
-- Add a secure code-execution sandbox for Python questions; never execute learner code directly in the Next.js server.
-- Add analytics, email verification, password reset and legal pages.
-- Replace example.com in `app/robots.ts` and `app/sitemap.ts` with the real Veyrin domain.
+```text
+/interview/genai-india
+```
+
+The ₹199 product slug is:
+
+```text
+genai-engineer-interview-bank-india
+```
