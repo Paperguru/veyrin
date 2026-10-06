@@ -11,7 +11,7 @@ create table if not exists public.question_attempts (id uuid primary key default
 alter table public.profiles enable row level security; alter table public.content_drafts enable row level security; alter table public.courses enable row level security; alter table public.lessons enable row level security; alter table public.questions enable row level security; alter table public.enrollments enable row level security; alter table public.question_attempts enable row level security;
 create policy "published courses public" on public.courses for select using (published=true or auth.uid()=null);
 create policy "published lessons public" on public.lessons for select using (published=true);
-create policy "published questions public" on public.questions for select using (true);
+drop policy if exists "published questions public" on public.questions;
 create policy "own profile" on public.profiles for select using (auth.uid()=id);
 create policy "own enrollment" on public.enrollments for select using (auth.uid()=user_id);
 create policy "own attempts" on public.question_attempts for all using (auth.uid()=user_id) with check (auth.uid()=user_id);
@@ -37,3 +37,28 @@ insert into public.questions (course_id,category,role,difficulty,question,answer
 select c.id,'LLM','GenAI Engineer','Hard','An LLM application is accurate in offline testing but fails after deployment. How would you diagnose the issue?','Separate retrieval, prompt, model, tool and data-drift failures. Add traces, slice production traffic, compare offline and online distributions, inspect retrieved context, measure groundedness and latency, and reproduce failures in a regression suite.','{"llm","debugging","observability"}'
 from public.courses c where c.slug='genai-engineer-interview-bank-india'
 and not exists (select 1 from public.questions q where q.course_id=c.id and q.question like 'An LLM application is accurate%');
+
+-- Razorpay production payment ledger.
+create table if not exists public.payment_orders (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  course_id uuid not null references public.courses(id) on delete cascade,
+  razorpay_order_id text unique not null,
+  razorpay_payment_id text,
+  razorpay_signature text,
+  amount integer not null,
+  currency text not null default 'INR',
+  status text not null default 'created',
+  paid_at timestamptz,
+  created_at timestamptz default now()
+);
+create index if not exists payment_orders_user_idx on public.payment_orders(user_id);
+create index if not exists payment_orders_course_idx on public.payment_orders(course_id);
+alter table public.payment_orders enable row level security;
+drop policy if exists "users can read own payment orders" on public.payment_orders;
+create policy "users can read own payment orders" on public.payment_orders for select using (auth.uid()=user_id);
+
+-- Refresh PostgREST after schema deployment.
+notify pgrst, 'reload schema';
+
+-- See supabase/migrations/20261005_genai_bank_seed.sql for the complete starter bank and idempotent question seed.
