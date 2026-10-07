@@ -88,3 +88,32 @@ A2. MCP is a protocol for connecting AI applications with external tools and con
 ```
 
 The parser also accepts `Question 1:` / `Answer 1:` style labels.
+
+## V9 learning/content reliability update — 2026-10-07
+
+This update keeps the existing Veyrin UI and product/payment architecture while fixing content visibility and adding:
+
+- Published interview material now appears on the home page without requiring `featured=true`.
+- Advertisement delivery uses a no-cache public endpoint so new active ads appear without a redeploy; public ad images use the public Supabase bucket.
+- Interview questions are category-aware in Admin and Interview Lab.
+- Python coding practice has category-aware Admin creation and a learner flow where submitted code is followed by the expected solution.
+- AI Studio can generate material drafts, interview Q&A and Python coding sets by category.
+- Profile name can be changed from `/profile`.
+- Login/signup explicitly state that passwords are case-sensitive.
+- Forgot-password uses Supabase password reset and `/auth/callback` → `/reset-password`.
+
+### Supabase migration
+
+Apply:
+
+`supabase/migrations/20261007_learning_content_system_v2.sql`
+
+It adds the `coding_questions` table and indexes. Keep the earlier learning-content migration as well.
+
+### Supabase Auth redirect
+
+For production password reset, allow the production callback URL in Supabase Authentication URL Configuration:
+
+`https://veyrin.in/auth/callback`
+
+Also keep the local development callback if you use localhost during development.
