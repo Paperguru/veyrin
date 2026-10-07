@@ -1,0 +1,5 @@
+import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { questions as demoQuestions } from "@/lib/demo-data";
+export async function GET(_req:Request,{params}:{params:Promise<{id:string}>}){const{id}=await params;const db=createAdminClient();const{data:q}=await db.from("questions").select("id,answer,course_id,published").eq("id",id).maybeSingle();if(!q){const fallback=(demoQuestions as any[]).find(x=>x.id===id);if(fallback)return NextResponse.json({answer:fallback.answer||"No answer has been added yet."});}if(!q||!q.published)return NextResponse.json({error:"Question not found"},{status:404});if(q.course_id){const sb=await createClient();const{data:{user}}=await sb.auth.getUser();if(!user)return NextResponse.json({error:"Login required"},{status:401});const{data:e}=await db.from("enrollments").select("status").eq("user_id",user.id).eq("course_id",q.course_id).maybeSingle();if(e?.status!=="active")return NextResponse.json({error:"Purchase required"},{status:403});}return NextResponse.json({answer:q.answer||"No answer has been added yet."});}

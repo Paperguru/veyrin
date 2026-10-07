@@ -1,0 +1,4 @@
+"use server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { ExternalLink } from "lucide-react";
+export default async function SiteAd(){let ad:any=null;try{const r=await createAdminClient().from("advertisements").select("id,title,text,destination_url,image_path").eq("active",true).order("priority",{ascending:true}).order("created_at",{ascending:false}).limit(1).maybeSingle();ad=r.data}catch{}if(!ad)return null;let imageUrl="";if(ad.image_path){const{data}=createAdminClient().storage.from("veyrin-public").getPublicUrl(ad.image_path);imageUrl=data.publicUrl;}return <a className="site-ad" href={ad.destination_url} target="_blank" rel="noreferrer"><div className="site-ad-label">Sponsored</div>{imageUrl&&<img src={imageUrl} alt={ad.title} className="site-ad-image"/>}<div className="site-ad-body"><strong>{ad.title}</strong>{ad.text&&<span>{ad.text}</span>}<span className="site-ad-link">Visit <ExternalLink size={12}/></span></div></a>}

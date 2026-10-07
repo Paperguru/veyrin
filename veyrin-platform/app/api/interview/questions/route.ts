@@ -1,0 +1,4 @@
+import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+export async function GET(){const sb=await createClient();const{data:{user}}=await sb.auth.getUser();const db=createAdminClient();let rows:any[]=[];const{data:free}=await db.from("questions").select("id,category,role,difficulty,question,tags,course_id").eq("published",true).is("course_id",null).order("created_at",{ascending:true});rows.push(...(free||[]));if(user){const{data:enrolled}=await db.from("enrollments").select("course_id").eq("user_id",user.id).eq("status","active");const ids=(enrolled||[]).map(x=>x.course_id).filter(Boolean);if(ids.length){const{data:paid}=await db.from("questions").select("id,category,role,difficulty,question,tags,course_id").eq("published",true).in("course_id",ids).order("created_at",{ascending:true});rows.push(...(paid||[]));}}return NextResponse.json({questions:rows});}

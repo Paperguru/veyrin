@@ -16,3 +16,12 @@
 @media(max-width:900px){.navactions .logout-nav,.navactions .login-nav{display:none!important}.mobile-nav .btn{display:flex}}
 @media(max-width:620px){.brand-word{font-size:22px}.logo{width:36px;height:36px}}
 .dashboard-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:850;margin:0 0 10px}
+
+/* Small site-wide advertisement slot — intentionally compact and non-layout-breaking. */
+.site-ad{position:fixed;right:14px;top:50%;transform:translateY(-50%);width:150px;background:rgba(17,17,24,.96);border:1px solid var(--line);border-radius:14px;overflow:hidden;z-index:40;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.site-ad:hover{border-color:rgba(217,255,102,.35);transform:translateY(-50%) translateY(-1px)}
+.site-ad-label{padding:6px 9px;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);border-bottom:1px solid var(--line)}
+.site-ad-image{display:block;width:100%;height:82px;object-fit:cover}
+.site-ad-body{padding:10px}.site-ad-body strong{display:block;font-size:12px;line-height:1.3}.site-ad-body span{display:block;color:var(--muted);font-size:10px;line-height:1.45;margin-top:5px}.site-ad-link{display:flex!important;align-items:center;gap:4px;color:var(--accent)!important;font-weight:800;margin-top:8px!important}
+.spin{animation:veyrin-spin 1s linear infinite}@keyframes veyrin-spin{to{transform:rotate(360deg)}}
+@media(max-width:1200px){.site-ad{display:none}}
