@@ -59,6 +59,7 @@ export function SiteHeader() {
         <nav className="navlinks" aria-label="Main navigation">
           <Link href="/courses">Learning</Link>
           <Link href="/interview">Interview Lab</Link>
+          <Link href="/materials">Interview Material</Link>
           <Link href="/coding">Python</Link>
           <Link href="/videos">Videos</Link>
           <Link href="/about">About</Link>
@@ -84,6 +85,7 @@ export function SiteHeader() {
           <div className="mobile-nav" role="menu">
             <Link href="/courses" onClick={closeMenu}>Learning</Link>
             <Link href="/interview" onClick={closeMenu}>Interview Lab</Link>
+            <Link href="/materials" onClick={closeMenu}>Interview Material</Link>
             <Link href="/coding" onClick={closeMenu}>Python</Link>
             <Link href="/videos" onClick={closeMenu}>Videos</Link>
             <Link href="/about" onClick={closeMenu}>About</Link>
