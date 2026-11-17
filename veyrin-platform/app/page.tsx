@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import Link from "next/link";import {ArrowRight,BrainCircuit,Code2,Layers3,MessageSquareText,PlayCircle,Sparkles,Target,Timer,Workflow} from "lucide-react";import {courses} from "@/lib/demo-data";
 import {createAdminClient} from "@/lib/supabase/admin";
 import {FileText,LockKeyhole} from "lucide-react";
