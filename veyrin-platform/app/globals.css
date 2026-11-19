@@ -25,3 +25,25 @@
 .site-ad-body{padding:10px}.site-ad-body strong{display:block;font-size:12px;line-height:1.3}.site-ad-body span{display:block;color:var(--muted);font-size:10px;line-height:1.45;margin-top:5px}.site-ad-link{display:flex!important;align-items:center;gap:4px;color:var(--accent)!important;font-weight:800;margin-top:8px!important}
 .spin{animation:veyrin-spin 1s linear infinite}@keyframes veyrin-spin{to{transform:rotate(360deg)}}
 @media(max-width:980px){.site-ad{display:none}}
+
+.material-description {
+  margin-top: 10px;
+}
+
+.material-description-text {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
+.material-view-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}

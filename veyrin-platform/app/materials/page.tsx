@@ -22,5 +22,15 @@ export default async function Materials() {
   } catch {}
 
   // keep the rest of your existing code below
- return <main className="page"><div className="container"><span className="eyebrow"><FileText size={13}/> Interview material</span><h1 className="page-title">Interview material you can actually use.</h1><p className="sub">Free notes, interview guides and premium preparation material. Open a material to read it or unlock the paid version.</p><div className="course-grid" style={{marginTop:28}}>{(materials||[]).map((m:any)=><Link key={m.id} href={`/materials/${m.slug}`} className="card course"><div className="course-top"><span style={{fontSize:42}}>{m.access_type==="paid"?<LockKeyhole/>:<FileText/>}</span><span className="pill">{m.access_type==="paid"?"Premium":"Free"}</span></div><div className="course-body"><h3>{m.title}</h3><p>{m.description||"Interview preparation material from Veyrin."}</p><div className="meta"><span>{m.content_type.toUpperCase()}</span>{m.file_name&&<span>Downloadable</span>}</div><span className="btn primary" style={{display:"inline-flex",marginTop:18}}>Open material <ArrowRight size={15}/></span></div></Link>)}</div>{!materials?.length&&<div className="empty" style={{marginTop:25}}>Interview material will appear here after it is published from Admin.</div>}</div></main>;
+ return <main className="page"><div className="container"><span className="eyebrow"><FileText size={13}/> Interview material</span><h1 className="page-title">Interview material you can actually use.</h1><p className="sub">Free notes, interview guides and premium preparation material. Open a material to read it or unlock the paid version.</p><div className="course-grid" style={{marginTop:28}}>{(materials||[]).map((m:any)=><Link key={m.id} href={`/materials/${m.slug}`} className="card course"><div className="course-top"><span style={{fontSize:42}}>{m.access_type==="paid"?<LockKeyhole/>:<FileText/>}</span><span className="pill">{m.access_type==="paid"?"Premium":"Free"}</span></div><div className="course-body"><h3>{m.title}</h3><div className="material-description">
+  <p className="material-description-text">
+    {m.description || "Interview preparation material from Veyrin."}
+  </p>
+
+  {m.description && m.description.length > 180 && (
+    <span className="material-view-more">
+      View more <ArrowRight size={13} />
+    </span>
+  )}
+</div><div className="meta"><span>{m.content_type.toUpperCase()}</span>{m.file_name&&<span>Downloadable</span>}</div><span className="btn primary" style={{display:"inline-flex",marginTop:18}}>Open material <ArrowRight size={15}/></span></div></Link>)}</div>{!materials?.length&&<div className="empty" style={{marginTop:25}}>Interview material will appear here after it is published from Admin.</div>}</div></main>;
 }
