@@ -1,0 +1,11 @@
+VEYRN PRODUCTION UPDATE — 19 NOV 2026
+PATCH ZIP — copy the included files into your existing veyrin-platform project.
+
+Changes: social links, homepage material 4-line preview, website analytics, Admin Analytics, free PDF download tracking, paid course access/download tracking, password reset callback, Analytics admin link.
+
+Required:
+1. Run supabase/migrations/20261119_veyrin_analytics.sql in the existing Veyrin Supabase project.
+2. Supabase Authentication -> URL Configuration: Site URL = https://veyrin.in
+3. Add redirect URLs: https://veyrin.in/auth/callback and https://veyrin.in/auth/callback?next=/reset-password
+4. Vercel environment variable: NEXT_PUBLIC_SITE_URL=https://veyrin.in, then redeploy.
+5. Keep SUPABASE_SERVICE_ROLE_KEY server-only.
