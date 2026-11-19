@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Check, ChevronRight, Loader2, RotateCcw, Sparkles } from "lucide-react";
 
 type Q={id:string;category?:string;role?:string;difficulty?:string;question:string;course_id?:string|null};
-export default function InterviewPractice({questions,title="Interview Practice",subtitle="Answer first. Submit your response. Then compare it with the model answer and continue."}:{questions:Q[];title?:string;subtitle?:string}){
+export default function InterviewPractice({questions,title="Interview Practice",subtitle="Answer first. Submit your response. Then compare it with the model answer and continue."}:{questions:Q[];title?:string;subtitle?:string;premium?:boolean}){
  const categories=useMemo(()=>["All",...Array.from(new Set(questions.map(q=>q.category||"General").filter(Boolean)))],[questions]);
  const[category,setCategory]=useState("All");const[index,setIndex]=useState(0);const[draft,setDraft]=useState("");const[answer,setAnswer]=useState<string|null>(null);const[busy,setBusy]=useState(false);const[error,setError]=useState("");
  const filtered=useMemo(()=>category==="All"?questions:questions.filter(q=>(q.category||"General")===category),[questions,category]);
